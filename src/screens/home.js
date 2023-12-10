@@ -4,7 +4,7 @@ import UpcomingMovies from '../components/upcoming-movies';
 import TrendingMovies from '../components/trending-movies';
 import TopRated from '../components/top-rated-movies';
 import PopularMovies from '../components/popular-movies';
-
+import Loader from '../components/loader';
 export default function HomeScreen({ navigation }) {
 
   return (
@@ -21,6 +21,7 @@ export default function HomeScreen({ navigation }) {
           <PopularMovies />
           <TopRated />
         </ScrollView>
+        
       </View>
       
     // </LinearGradient>

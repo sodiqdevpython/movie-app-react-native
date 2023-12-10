@@ -1,15 +1,16 @@
-import { Dimensions, View ,StyleSheet, Image, ScrollView } from 'react-native';
+import { Dimensions, View ,StyleSheet, Image, ScrollView, ActivityIndicator } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MagnifyingGlassIcon } from 'react-native-heroicons/outline';
-
+import Loader from '../components/loader';
 import Carousel from 'react-native-snap-carousel';
 
 
 export default function TrendingMovies() {
     const width = Dimensions.get('window').width;
     const [data, setData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
 
     useEffect(() => {
@@ -20,6 +21,7 @@ export default function TrendingMovies() {
             setData(response.results.map(movie => ({
               imageUrl: `https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`
             })));
+            setIsLoading(false);
           } catch (error) {
             console.log(error);
           }
@@ -32,6 +34,31 @@ export default function TrendingMovies() {
           <Image source={{ uri: item.imageUrl }} style={style.image} />
         </View>
       );
+
+        
+      function Loading() {
+        if (isLoading) {
+          return (
+            <View>
+              {Loader()}
+            </View>
+          );
+        }
+        else {
+          return (
+            <Carousel
+                    data={data}
+                    renderItem={renderItem}
+                    sliderWidth={width}
+                    itemWidth={width * 0.7}
+                    firstItem={10}
+                    slideStyle={{ display: 'flex' }}
+                    inactiveSlideOpacity={0.2}
+              />
+          );
+        }
+      }
+
     return (
         <View>
             <StatusBar style='light' />
@@ -47,15 +74,7 @@ export default function TrendingMovies() {
                 </SafeAreaView>
             <ScrollView>
                 <View style={{ flex: 1, paddingTop: '7%' }}>
-                    <Carousel
-                    data={data}
-                    renderItem={renderItem}
-                    sliderWidth={width}
-                    itemWidth={width * 0.7}
-                    firstItem={10}
-                    slideStyle={{ display: 'flex' }}
-                    inactiveSlideOpacity={0.2}
-                    />
+                    {Loading()}
                 </View>
 
             </ScrollView>
